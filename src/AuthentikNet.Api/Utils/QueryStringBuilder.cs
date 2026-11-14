@@ -1,4 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
+using System.Globalization;
+using System.Text.Json;
 
 namespace AuthentikNet.Api.Utils;
 
@@ -19,15 +21,12 @@ public static class QueryStringBuilder
                     break;
                 case IEnumerable enumerable:
                 {
-                    foreach (var item in enumerable)
-                    {
-                        queryParams.Add($"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(item?.ToString() ?? "")}");
-                    }
-
+                    queryParams.AddRange(from object? item in enumerable
+                        select $"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(FormatValue(item))}");
                     break;
                 }
                 default:
-                    queryParams.Add($"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(value.ToString() ?? "")}");
+                    queryParams.Add($"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(FormatValue(value))}");
                     break;
             }
         }
@@ -37,4 +36,19 @@ public static class QueryStringBuilder
 
         return baseUrl + (baseUrl.Contains('?') ? "&" : "?") + string.Join("&", queryParams);
     }
+
+    /// <summary>
+    /// Formats a value for inclusion in a query string, handling special cases for null, booleans, enums, and date/time values.
+    /// </summary>
+    private static string FormatValue(object? value) => value switch
+    {
+        null => string.Empty,
+        bool boolean => boolean ? "true" : "false",
+        Enum enumValue => JsonSerializer.SerializeToElement(enumValue, enumValue.GetType()).GetString()
+                          ?? throw new JsonException("Enum query values must serialize to strings."),
+        DateTimeOffset date => date.ToString("O", CultureInfo.InvariantCulture),
+        DateTime date => date.ToString("O", CultureInfo.InvariantCulture),
+        IFormattable formattable => formattable.ToString(null, CultureInfo.InvariantCulture),
+        _ => value.ToString() ?? string.Empty
+    };
 }
