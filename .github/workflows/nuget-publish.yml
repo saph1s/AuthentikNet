@@ -11,6 +11,8 @@ on:
     types:
       - published
 
+permissions:
+  contents: read
 
 env:
   PROJECT_PATH: ./src/AuthentikNet.Api/AuthentikNet.Api.csproj
@@ -90,6 +92,9 @@ jobs:
     needs: build-nuget
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -102,9 +107,17 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: NuGet login (Trusted Publishing)
+        uses: NuGet/login@v1
+        id: nuget_login
+        with:
+          user: ${{ vars.NUGET_USER }}
+
       - name: Publish to NuGet
+        env:
+          NUGET_API_KEY: ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
         run: |
           for f in ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg; do
             echo "Publishing $f to NuGet..."
-            dotnet nuget push "$f" --source ${{ env.NUGET_SOURCE_URL }} --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+            dotnet nuget push "$f" --source ${{ env.NUGET_SOURCE_URL }} --api-key "$NUGET_API_KEY" --skip-duplicate
           done
