@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace AuthentikNet.Api.Models;
 
@@ -44,4 +44,10 @@ public class SSFProvider
 
     [JsonPropertyName("ssf_url")] public required string? SSFUrl { get; init; }
     [JsonPropertyName("event_retention")] public string? EventRetention { get; set; }
+
+    [JsonPropertyName("oidc_auth_providers_obj")]
+    public required List<Provider> OidcAuthProvidersObj { get; init; }
+
+    [JsonPropertyName("push_verify_certificates")]
+    public bool? PushVerifyCertificates { get; set; }
 }

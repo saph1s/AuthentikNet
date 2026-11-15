@@ -1,9 +1,11 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using AuthentikNet.Api.Client.Admin;
 using AuthentikNet.Api.Client.Core;
+using AuthentikNet.Api.Client.Ssf;
+using AuthentikNet.Api.Client.Tasks;
 
 namespace AuthentikNet.Api.Client;
 
@@ -14,6 +16,8 @@ public class AuthentikClient
 
     public AdminApi Admin { get; }
     public CoreApi Core { get; }
+    public SsfApi Ssf { get; }
+    public TasksApi Tasks { get; }
 
     public AuthentikClient(HttpClient client, AuthentikClientOptions options)
     {
@@ -30,6 +34,8 @@ public class AuthentikClient
 
         Admin = new AdminApi(this);
         Core = new CoreApi(this);
+        Ssf = new SsfApi(this);
+        Tasks = new TasksApi(this);
     }
 
     public AuthentikClient(AuthentikClientOptions options) : this(new HttpClient(), options)

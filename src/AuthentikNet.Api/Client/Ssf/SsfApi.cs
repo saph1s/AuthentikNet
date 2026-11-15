@@ -1,4 +1,5 @@
-﻿using AuthentikNet.Api.Models;
+using AuthentikNet.Api.Models;
+using AuthentikNet.Api.Utils;
 
 namespace AuthentikNet.Api.Client.Ssf;
 
@@ -23,30 +24,22 @@ public class SsfApi
     /// <param name="search">A search term</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<PaginatedSSFStreamList> SsfStreamsList(string? deliveryMethod, string? endpointUrl,
-        string? ordering, int? page,
-        int? pageSize, int? provider, string? search, CancellationToken cancellationToken = default)
+    public async Task<PaginatedSSFStreamList> SsfStreamsList(DeliveryMethodEnum? deliveryMethod = null,
+        string? endpointUrl = null,
+        string? ordering = null, int? page = null,
+        int? pageSize = null, int? provider = null, string? search = null,
+        CancellationToken cancellationToken = default)
     {
-        var url = "/ssf/streams/";
-        var queryParameters = new Dictionary<string, object?>
-            {
-                { "delivery_method", deliveryMethod },
-                { "endpoint_url", endpointUrl },
-                { "ordering", ordering },
-                { "page", page },
-                { "page_size", pageSize },
-                { "provider", provider },
-                { "search", search }
-            }
-            .Where(kv => kv.Value != null)
-            .ToDictionary(kv => kv.Key, kv => kv.Value!);
-
-        if (queryParameters.Count > 0)
+        var url = QueryStringBuilder.BuildQueryString("/ssf/streams/", new()
         {
-            var query = string.Join("&", queryParameters
-                .Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value.ToString()!)}"));
-            url += "?" + query;
-        }
+            ["delivery_method"] = deliveryMethod,
+            ["endpoint_url"] = endpointUrl,
+            ["ordering"] = ordering,
+            ["page"] = page,
+            ["page_size"] = pageSize,
+            ["provider"] = provider,
+            ["search"] = search
+        });
 
         return await _client.SendAsync<PaginatedSSFStreamList>(HttpMethod.Get, url,
             cancellationToken: cancellationToken);

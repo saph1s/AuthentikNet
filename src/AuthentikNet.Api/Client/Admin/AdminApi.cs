@@ -1,4 +1,5 @@
-﻿using AuthentikNet.Api.Models;
+using AuthentikNet.Api.Models;
+using AuthentikNet.Api.Utils;
 using Version = AuthentikNet.Api.Models.Version;
 
 namespace AuthentikNet.Api.Client.Admin;
@@ -23,24 +24,17 @@ public class AdminApi
     }
 
     /// <summary>
-    /// Login Metrics per 1h
-    /// </summary>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public async Task<LoginMetrics> AdminMetricsRetrieve(CancellationToken cancellationToken = default)
-    {
-        return await _client.SendAsync<LoginMetrics>(HttpMethod.Get, "/admin/metrics/",
-            cancellationToken: cancellationToken);
-    }
-
-    /// <summary>
     /// Read-only view list all installed models
     /// </summary>
+    /// <param name="filterHasAttributes">Filter models by whether they support attributes.</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<List<App>> AdminModelsList(CancellationToken cancellationToken = default)
+    public async Task<List<App>> AdminModelsList(CancellationToken cancellationToken = default,
+        bool? filterHasAttributes = null)
     {
-        return await _client.SendAsync<List<App>>(HttpMethod.Get, "/admin/models/",
+        var url = QueryStringBuilder.BuildQueryString("/admin/models/",
+            new() { ["filter_has_attributes"] = filterHasAttributes });
+        return await _client.SendAsync<List<App>>(HttpMethod.Get, url,
             cancellationToken: cancellationToken);
     }
 
@@ -58,10 +52,10 @@ public class AdminApi
     /// <summary>
     /// Update settings
     /// </summary>
-    /// <param name="data">Settings model</param>
+    /// <param name="data">Settings request</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Settings> AdminSettingsUpdate(Settings data, CancellationToken cancellationToken = default)
+    public async Task<Settings> AdminSettingsUpdate(SettingsRequest data, CancellationToken cancellationToken = default)
     {
         return await _client.SendAsync<Settings>(HttpMethod.Put, "/admin/settings/", data, cancellationToken);
     }
@@ -69,7 +63,7 @@ public class AdminApi
     /// <summary>
     /// Partial update settings
     /// </summary>
-    /// <param name="data">PartialSettings moder</param>
+    /// <param name="data">PatchedSettingsRequest model</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public async Task<Settings> AdminSettingsPartialUpdate(PatchedSettingsRequest data,
@@ -157,17 +151,6 @@ public class AdminApi
     public async Task<VersionHistory> AdminVersionHistoryRetrieve(int id, CancellationToken cancellationToken = default)
     {
         return await _client.SendAsync<VersionHistory>(HttpMethod.Get, $"/admin/version/history/{id}/",
-            cancellationToken: cancellationToken);
-    }
-
-    /// <summary>
-    /// Get currently connected worker count.
-    /// </summary>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public async Task<Workers> AdminWorkersRetrieve(CancellationToken cancellationToken = default)
-    {
-        return await _client.SendAsync<Workers>(HttpMethod.Get, "/admin/workers/",
             cancellationToken: cancellationToken);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using AuthentikNet.Api.Utils;
 
@@ -17,5 +17,11 @@ public enum DeliveryMethodEnum
     /// POLL
     /// </summary>
     [EnumMember(Value = "https://schemas.openid.net/secevent/risc/delivery-method/poll")]
-    Poll
+    Poll,
+
+    [EnumMember(Value = "urn:ietf:rfc:8935")]
+    Rfc8935,
+
+    [EnumMember(Value = "urn:ietf:rfc:8936")]
+    Rfc8936
 }

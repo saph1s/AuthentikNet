@@ -1,5 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using AuthentikNet.Api.Utils;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AuthentikNet.Api.Models;
 
@@ -18,8 +18,8 @@ public class PatchedUserRequest
     public bool? IsActive { get; set; }
 
     [JsonPropertyName("last_login")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DateTime? LastLogin { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<DateTime?> LastLogin { get; set; }
 
     [JsonPropertyName("groups")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -30,9 +30,8 @@ public class PatchedUserRequest
     public string? Email { get; set; }
 
     [JsonPropertyName("attributes")]
-    [JsonConverter(typeof(DynamicAttributesJsonConverter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public object? Attributes { get; set; }
+    public Dictionary<string, JsonElement>? Attributes { get; set; }
 
     [JsonPropertyName("path")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -41,4 +40,8 @@ public class PatchedUserRequest
     [JsonPropertyName("type")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public UserTypeEnum? Type { get; set; }
+
+    [JsonPropertyName("roles")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<Guid>? Roles { get; set; }
 }

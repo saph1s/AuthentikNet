@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace AuthentikNet.Api.Models;
 
@@ -13,4 +13,5 @@ public class SSFStream
     [JsonPropertyName("format")] public required string Format { get; set; }
     [JsonPropertyName("aud")] public List<string>? Aud { get; init; }
     [JsonPropertyName("iss")] public required string Iss { get; set; }
+    [JsonPropertyName("status")] public SSFStreamStatusEnum? Status { get; set; }
 }

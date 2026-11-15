@@ -1,5 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using AuthentikNet.Api.Utils;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AuthentikNet.Api.Models;
 
@@ -10,7 +10,5 @@ public class PartialGroup
     [JsonPropertyName("name")] public required string Name { get; set; }
     [JsonPropertyName("is_superuser")] public bool IsSuperUser { get; set; }
 
-    [JsonPropertyName("attributes")]
-    [JsonConverter(typeof(DynamicAttributesJsonConverter))]
-    public object Attributes { get; set; } = new();
+    [JsonPropertyName("attributes")] public Dictionary<string, JsonElement> Attributes { get; set; } = new();
 }

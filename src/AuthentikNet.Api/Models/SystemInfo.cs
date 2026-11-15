@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace AuthentikNet.Api.Models;
 
@@ -51,4 +51,8 @@ public class SystemInfo
     /// </summary>
     [JsonPropertyName("embedded_outpost_host")]
     public required string EmbeddedOutpostHost { get; init; }
+
+    /// <summary>Configured public URL of this instance.</summary>
+    [JsonPropertyName("base_url")]
+    public required string BaseUrl { get; init; }
 }
