@@ -3,7 +3,7 @@ using AuthentikNet.Api.Utils;
 
 namespace AuthentikNet.Api.Client.Core;
 
-public class CoreApi
+public partial class CoreApi
 {
     private readonly AuthentikClient _client;
 
@@ -51,7 +51,7 @@ public class CoreApi
         string? attributes = null,
         string? email = null,
         string[]? groupsByName = null,
-        string[]? groupsByPk = null,
+        Guid[]? groupsByPk = null,
         bool? isActive = null,
         bool? isSuperuser = null,
         string? name = null,
