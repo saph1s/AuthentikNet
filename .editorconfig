@@ -1,4 +1,4 @@
-﻿root = true
+root = true
 
 [*]
 charset = utf-8
@@ -18,3 +18,14 @@ trim_trailing_whitespace = false
 
 [*.sh]
 end_of_line = lf
+
+[*.cs]
+# XML documentation comments (Rider / ReSharper)
+resharper_xmldoc_keep_user_linebreaks = true
+resharper_xmldoc_linebreaks_inside_tags_for_multiline_elements = true
+resharper_xmldoc_linebreaks_inside_tags_for_elements_with_child_elements = true
+resharper_xmldoc_linebreak_before_multiline_elements = true
+resharper_xmldoc_linebreak_before_singleline_elements = false
+resharper_xmldoc_indent_text = zero_indent
+resharper_xmldoc_indent_child_elements = zero_indent
+resharper_xmldoc_spaces_inside_tags = false
