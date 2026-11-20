@@ -42,54 +42,73 @@ public class AuthentikClient
     {
     }
 
-    public async Task<T> SendAsync<T>(HttpMethod method, string path, object? data = null,
+    /// <summary>
+    /// Sends an HTTP request that does not return a JSON response body (for example, 204 No Content).
+    /// </summary>
+    public async Task SendAsync(HttpMethod method, string path, object? data = null,
         CancellationToken cancellationToken = default)
     {
-        var request = new HttpRequestMessage(method, _options.BaseUrl + path);
-        try
+        using var request = CreateRequest(method, path, data);
+        using var response = await _client.SendAsync(request, cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
         {
-            if (data != null)
-            {
-                request.Content = new StringContent(
-                    JsonSerializer.Serialize(data),
-                    Encoding.UTF8,
-                    "application/json"
-                );
-            }
-
-            var response = await _client.SendAsync(request, cancellationToken);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                await HandleError(response);
-            }
-
-            return await DeserializeResponseAsync<T>(response);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
+            await HandleError(response, cancellationToken);
         }
     }
 
-    private async Task<T> DeserializeResponseAsync<T>(HttpResponseMessage response)
+    /// <summary>
+    /// Sends an HTTP request and deserializes the JSON response body.
+    /// </summary>
+    public async Task<T> SendAsync<T>(HttpMethod method, string path, object? data = null,
+        CancellationToken cancellationToken = default)
     {
-        var content = await response.Content.ReadAsStringAsync();
+        using var request = CreateRequest(method, path, data);
+        using var response = await _client.SendAsync(request, cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            await HandleError(response, cancellationToken);
+        }
+
+        return await DeserializeResponseAsync<T>(response, cancellationToken);
+    }
+
+    private HttpRequestMessage CreateRequest(HttpMethod method, string path, object? data)
+    {
+        var normalizedPath = path.StartsWith('/') ? path : "/" + path;
+        var request = new HttpRequestMessage(method, _options.BaseUrl.TrimEnd('/') + normalizedPath);
+
+        if (data != null)
+        {
+            request.Content = new StringContent(
+                JsonSerializer.Serialize(data),
+                Encoding.UTF8,
+                "application/json"
+            );
+        }
+
+        return request;
+    }
+
+    private async Task<T> DeserializeResponseAsync<T>(HttpResponseMessage response,
+        CancellationToken cancellationToken)
+    {
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
         return JsonSerializer.Deserialize<T>(content) ??
                throw new AuthentikException("Failed to deserialize response", 500);
     }
 
-    private async Task HandleError(HttpResponseMessage response)
+    private async Task HandleError(HttpResponseMessage response, CancellationToken cancellationToken)
     {
-        var content = await response.Content.ReadAsStringAsync();
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
         string errorMessage;
 
         if (response.Content.Headers.ContentType?.MediaType == "application/json")
         {
             try
             {
-                var json = JsonDocument.Parse(content);
+                using var json = JsonDocument.Parse(content);
                 errorMessage = json.RootElement.ToString();
             }
             catch (JsonException)
