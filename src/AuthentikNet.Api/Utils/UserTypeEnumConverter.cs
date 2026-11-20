@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using AuthentikNet.Api.Models;
 
@@ -7,6 +7,7 @@ namespace AuthentikNet.Api.Utils;
 /// <summary>
 /// Converter for <see cref="UserTypeEnum"/>.
 /// </summary>
+[Obsolete("Use JsonStringEnumMemberConverter<UserTypeEnum> instead.")]
 public class UserTypeEnumConverter : JsonConverter<UserTypeEnum>
 {
     /// <inheritdoc />
