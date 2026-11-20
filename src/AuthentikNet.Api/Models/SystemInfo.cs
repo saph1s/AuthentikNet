@@ -52,7 +52,9 @@ public class SystemInfo
     [JsonPropertyName("embedded_outpost_host")]
     public required string EmbeddedOutpostHost { get; init; }
 
-    /// <summary>Configured public URL of this instance.</summary>
+    /// <summary>
+    /// Configured public URL of this instance.
+    /// </summary>
     [JsonPropertyName("base_url")]
     public required string BaseUrl { get; init; }
 }

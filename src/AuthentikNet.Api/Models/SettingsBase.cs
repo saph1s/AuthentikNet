@@ -112,17 +112,23 @@ public abstract class SettingsBase
         }
     }
 
-    /// <summary>Public URL of this authentik instance.</summary>
+    /// <summary>
+    /// Public URL of this authentik instance.
+    /// </summary>
     [JsonPropertyName("base_url")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? BaseUrl { get; set; }
 
-    /// <summary>Default API page size.</summary>
+    /// <summary>
+    /// Default API page size.
+    /// </summary>
     [JsonPropertyName("pagination_default_page_size")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? PaginationDefaultPageSize { get; set; }
 
-    /// <summary>Maximum API page size.</summary>
+    /// <summary>
+    /// Maximum API page size.
+    /// </summary>
     [JsonPropertyName("pagination_max_page_size")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? PaginationMaxPageSize { get; set; }

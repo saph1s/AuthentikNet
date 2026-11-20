@@ -13,7 +13,7 @@ public class SettingsFlags
     [JsonPropertyName("flows_continuous_login")]
     public required bool FlowsContinuousLogin { get; set; }
 
-    // Deprecated by authentik, but still required by the 2026.8.5 contract.
+    // Deprecated by authentik, but still required by the 2026.8.6 contract.
     [JsonPropertyName("flows_refresh_others")]
     public required bool FlowsRefreshOthers { get; set; }
 }
