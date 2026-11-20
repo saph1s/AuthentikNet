@@ -8,7 +8,7 @@ Package versions follow the target authentik version.
 Install from your configured NuGet source:
 
 ```sh
-dotnet add package AuthentikNet.Api --version 2026.8.5
+dotnet add package AuthentikNet.Api --version 2026.8.6
 ```
 
 ## Quick start
@@ -33,12 +33,12 @@ client and its `HttpClient` for subsequent calls.
 
 ## Supported APIs
 
-| Client property | Operations                                                                                            |
-|-----------------|-------------------------------------------------------------------------------------------------------|
-| `Admin`         | List apps and models; read and update settings; read system information, version and version history. |
-| `Core`          | List, create, retrieve and partially update users; list and retrieve groups.                          |
-| `Ssf`           | List Shared Signals Framework streams.                                                                |
-| `Tasks`         | List connected workers.                                                                               |
+| Client property | Operations                                                                                                                                                  |
+|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Admin`         | List apps and models; read and update settings; read system information, version and version history.                                                       |
+| `Core`          | List, create, retrieve and partially update users; list and retrieve groups; list, create, retrieve, update, partially update and delete object attributes. |
+| `Ssf`           | List Shared Signals Framework streams.                                                                                                                      |
+| `Tasks`         | List connected workers.                                                                                                                                     |
 
 ## Build and test
 
