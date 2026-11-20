@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace AuthentikNet.Api.Models;
@@ -12,25 +12,24 @@ public class User
     [JsonPropertyName("last_login")] public DateTime? LastLogin { get; set; }
     [JsonPropertyName("is_superuser")] public required bool IsSuperUser { get; init; }
     [JsonPropertyName("groups")] public List<Guid> Groups { get; set; } = [];
-    [JsonPropertyName("groups_obj")] public required List<UserGroup> GroupsObj { get; init; }
+    [JsonPropertyName("groups_obj")] public required List<PartialGroup>? GroupsObj { get; init; }
     [JsonPropertyName("email")] public string Email { get; set; } = string.Empty;
     [JsonPropertyName("avatar")] public required string Avatar { get; init; }
-    [JsonPropertyName("attributes")] public Dictionary<string, string> Attributes { get; set; } = new();
+
+    [JsonPropertyName("attributes")] public Dictionary<string, JsonElement> Attributes { get; set; } = new();
+
     [JsonPropertyName("uid")] public required string Uid { get; init; }
     [JsonPropertyName("path")] public string Path { get; set; } = string.Empty;
+
     [JsonPropertyName("type")] public UserTypeEnum Type { get; set; }
+
     [JsonPropertyName("uuid")] public required Guid Uuid { get; init; }
-}
+    [JsonPropertyName("date_joined")] public required DateTime DateJoined { get; init; }
+    [JsonPropertyName("roles")] public List<Guid> Roles { get; set; } = [];
+    [JsonPropertyName("roles_obj")] public required List<Role>? RolesObj { get; init; }
 
-[JsonConverter(typeof(JsonStringEnumConverter))]
-public enum UserTypeEnum
-{
-    [EnumMember(Value = "internal")] Internal,
-    [EnumMember(Value = "external")] External,
+    [JsonPropertyName("password_change_date")]
+    public required DateTime PasswordChangeDate { get; init; }
 
-    [EnumMember(Value = "service_account")]
-    ServiceAccount,
-
-    [EnumMember(Value = "internal_service_account")]
-    InternalServiceAccount
+    [JsonPropertyName("last_updated")] public required DateTime LastUpdated { get; init; }
 }

@@ -2,8 +2,8 @@
 
 namespace AuthentikNet.Api.Models;
 
-public class Role
+public class App
 {
-    [JsonPropertyName("pk")] public required int Pk { get; init; }
     [JsonPropertyName("name")] public required string Name { get; set; }
+    [JsonPropertyName("label")] public required string Label { get; set; }
 }

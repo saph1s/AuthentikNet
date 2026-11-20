@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace AuthentikNet.Api.Models;
@@ -15,6 +16,8 @@ public class GroupMember
     [JsonPropertyName("is_active")] public bool IsActive { get; set; }
     [JsonPropertyName("last_login")] public DateTime? LastLogin { get; set; }
     [JsonPropertyName("email")] public string Email { get; set; } = string.Empty;
-    [JsonPropertyName("attributes")] public Dictionary<string, string> Attributes { get; set; } = new();
+
+    [JsonPropertyName("attributes")] public Dictionary<string, JsonElement> Attributes { get; set; } = new();
+
     [JsonPropertyName("uid")] public required string Uid { get; init; }
 }
